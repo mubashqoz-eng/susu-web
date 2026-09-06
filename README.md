@@ -287,13 +287,20 @@ server-side credential — including an `anon` variable that actually contains a
 
 ## Deployment
 
-[`docs/DEPLOY_RENDER.md`](docs/DEPLOY_RENDER.md) covers hosting this app on Render. The part worth
-reading before you start: every `VITE_` variable is compiled into the bundle at build time, so
-changing one requires a redeploy rather than a restart — and only browser-safe values may appear
-there at all.
+This is a static single-page app, which means the host has to be told that every URL it does not have
+a file for belongs to the router. Get that wrong and the site works until the first refresh, when it
+returns the host's 404 instead of the app.
 
-The blueprint is [`render.yaml`](render.yaml). It carries the SPA rewrite and the same security
-headers the Docker path sets, so the two deployments serve one directory of files the same way.
+- [`docs/DEPLOY_VERCEL.md`](docs/DEPLOY_VERCEL.md) — Vercel, via [`vercel.json`](vercel.json).
+- [`docs/DEPLOY_RENDER.md`](docs/DEPLOY_RENDER.md) — Render, via [`render.yaml`](render.yaml).
+
+Both files configure the same thing — a catch-all rewrite to `index.html`, plus the security headers
+`docker/security-headers.conf` sets for the container path — so all three deployments serve one
+directory of files the same way.
+
+One caveat that applies to every host here: `VITE_` variables are compiled into the bundle at build
+time, so changing one requires a redeploy rather than a restart, and only browser-safe values may
+appear there at all.
 
 ## Contributing
 
